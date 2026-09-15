@@ -9,9 +9,12 @@
     <div class="col">
         <ul class="list-group">
             {% for lead in leads %}
-            <li class="list-group-item list-group-item-light d-flex justify-content-between">
+            <li class="list-group-item list-group-item-light d-flex justify-content-between align-items-center">
                 <a href="/leads/{{ lead.pk }}" class="text-decoration-none link-dark">{{ lead.last_name }} {{ lead.first_name }}</a>
-                <a href="/leads/{{ lead.pk }}/delete" class="btn btn-danger">Удалить</a>
+                <span class="hstack gap-2">
+                    <a href="/customers/new/?lead={{ lead.pk }}" class="btn btn-success btn-sm">Перевести в активные</a>
+                    <a href="/leads/{{ lead.pk }}/delete" class="btn btn-danger btn-sm">Удалить</a>
+                </span>
             </li>
             {% endfor %}
         </ul>

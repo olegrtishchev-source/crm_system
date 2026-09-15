@@ -1,3 +1,1 @@
-from django.test import TestCase
-
-# Create your tests here.
+# Тесты для приложения leads добавляются на этапе 10 (Pytest).
