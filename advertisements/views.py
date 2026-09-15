@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.db.models import Count, QuerySet, Sum
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -60,3 +61,29 @@ class AdvertisementDeleteView(
     template_name = "ads/ads-delete.html"
     permission_required = "advertisements.delete_advertisement"
     success_url = reverse_lazy("advertisements:list")
+
+
+class AdvertisementStatisticView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    """Статистика эффективности рекламных кампаний: количество лидов и
+    привлечённых активных клиентов, соотношение суммы контрактов к
+    затратам на рекламу."""
+
+    model = Advertisement
+    template_name = "ads/ads-statistic.html"
+    context_object_name = "ads"
+    permission_required = "advertisements.view_advertisement"
+
+    def get_queryset(self) -> QuerySet[Advertisement]:
+        ads = Advertisement.objects.annotate(
+            leads_count=Count("leads", distinct=True),
+            customers_count=Count("leads__customer", distinct=True),
+            contracts_cost=Sum("leads__customer__contract__cost"),
+        )
+        for ad in ads:
+            contracts_cost = ad.contracts_cost  # type: ignore[attr-defined]
+            ad.profit = (  # type: ignore[attr-defined]
+                round(contracts_cost / ad.budget, 2)
+                if contracts_cost and ad.budget
+                else None
+            )
+        return ads
