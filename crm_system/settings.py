@@ -5,8 +5,10 @@ Django settings for crm_system project.
 import os
 from pathlib import Path
 
+import sentry_sdk
 from django.contrib.messages import constants as messages
 from dotenv import load_dotenv
+from sentry_sdk.integrations.django import DjangoIntegration
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
@@ -23,6 +25,8 @@ ALLOWED_HOSTS = os.environ.get(
 ).split(",")
 
 INSTALLED_APPS = [
+    "django_prometheus",
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -39,6 +43,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "django_prometheus.middleware.PrometheusBeforeMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -46,6 +51,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
 
 ROOT_URLCONF = "crm_system.urls"
@@ -115,3 +121,13 @@ LOGOUT_REDIRECT_URL = "login"
 MESSAGE_TAGS = {
     messages.ERROR: "danger",
 }
+
+# Мониторинг ошибок (Sentry) — включается только если в .env задан SENTRY_DSN,
+# иначе отключён и никак не влияет на работу приложения.
+SENTRY_DSN = os.environ.get("SENTRY_DSN")
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+        send_default_pii=False,
+    )

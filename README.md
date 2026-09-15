@@ -31,6 +31,9 @@ pip install -r requirements-dev.txt
 # createdb crm_system
 # psql -c "CREATE USER crm_system WITH PASSWORD 'crm_system';"
 # psql -c "GRANT ALL PRIVILEGES ON DATABASE crm_system TO crm_system;"
+# psql -d crm_system -c "GRANT ALL ON SCHEMA public TO crm_system;"
+# (начиная с PostgreSQL 15 обычная роль не может создавать таблицы в схеме
+# public без этого GRANT — без него migrate упадёт с "нет доступа к схеме public")
 
 python manage.py migrate
 python manage.py createsuperuser
@@ -44,3 +47,9 @@ pylint --rcfile .pylintrc products advertisements leads contracts customers user
 mypy .
 pytest
 ```
+
+## Мониторинг
+
+- `/metrics` — метрики Prometheus (django-prometheus), работает всегда.
+- Sentry (отслеживание ошибок) включается, если в `.env` задать `SENTRY_DSN`;
+  без него ничего не активируется.
