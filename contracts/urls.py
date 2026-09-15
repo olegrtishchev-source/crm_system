@@ -1,5 +1,13 @@
 from django.urls import path
 
-app_name = "contracts"
+from . import views
 
-urlpatterns = []
+app_name = "contracts"  # pylint: disable=invalid-name
+
+urlpatterns = [
+    path("", views.ContractListView.as_view(), name="list"),
+    path("new/", views.ContractCreateView.as_view(), name="create"),
+    path("<int:pk>/", views.ContractDetailView.as_view(), name="detail"),
+    path("<int:pk>/edit/", views.ContractUpdateView.as_view(), name="edit"),
+    path("<int:pk>/delete/", views.ContractDeleteView.as_view(), name="delete"),
+]
