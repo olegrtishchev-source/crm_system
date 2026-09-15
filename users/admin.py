@@ -1,3 +1,1 @@
-from django.contrib import admin
-
-# Register your models here.
+# В приложении users нет моделей для регистрации в админке.

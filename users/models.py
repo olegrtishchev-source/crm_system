@@ -1,3 +1,3 @@
-from django.db import models
-
-# Create your models here.
+# В приложении users нет собственных моделей — IndexView строит
+# статистику на основе моделей других приложений (products, advertisements,
+# leads, customers).

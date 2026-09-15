@@ -1,5 +1,9 @@
 from django.urls import path
 
-app_name = "users"
+from . import views
 
-urlpatterns = []
+app_name = "users"  # pylint: disable=invalid-name
+
+urlpatterns = [
+    path("", views.IndexView.as_view(), name="index"),
+]
