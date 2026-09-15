@@ -34,6 +34,9 @@ pip install -r requirements-dev.txt
 # psql -d crm_system -c "GRANT ALL ON SCHEMA public TO crm_system;"
 # (начиная с PostgreSQL 15 обычная роль не может создавать таблицы в схеме
 # public без этого GRANT — без него migrate упадёт с "нет доступа к схеме public")
+# psql -c "ALTER ROLE crm_system CREATEDB;"
+# (нужно для pytest — pytest-django сам создаёт и удаляет тестовую БД
+# test_crm_system перед прогоном тестов)
 
 python manage.py migrate
 python manage.py createsuperuser
