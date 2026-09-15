@@ -8,6 +8,8 @@ from django.views.generic import (
     UpdateView,
 )
 
+from crm_system.mixins import ProtectedDeleteMixin
+
 from .forms import ProductForm
 from .models import Product
 
@@ -49,7 +51,9 @@ class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
     success_url = reverse_lazy("products:list")
 
 
-class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class ProductDeleteView(
+    LoginRequiredMixin, PermissionRequiredMixin, ProtectedDeleteMixin, DeleteView
+):
     """Удаление услуги."""
 
     model = Product

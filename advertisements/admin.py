@@ -1,3 +1,12 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Advertisement
+
+
+@admin.register(Advertisement)
+class AdvertisementAdmin(admin.ModelAdmin):
+    """Административный интерфейс для рекламных кампаний."""
+
+    list_display = ("name", "product", "channel", "budget")
+    list_filter = ("channel",)
+    search_fields = ("name",)

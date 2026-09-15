@@ -5,6 +5,7 @@ Django settings for crm_system project.
 import os
 from pathlib import Path
 
+from django.contrib.messages import constants as messages
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -110,3 +111,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "users:index"
 LOGOUT_REDIRECT_URL = "login"
+
+MESSAGE_TAGS = {
+    messages.ERROR: "danger",
+}
