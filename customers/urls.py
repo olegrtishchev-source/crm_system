@@ -1,5 +1,13 @@
 from django.urls import path
 
-app_name = "customers"
+from . import views
 
-urlpatterns = []
+app_name = "customers"  # pylint: disable=invalid-name
+
+urlpatterns = [
+    path("", views.CustomerListView.as_view(), name="list"),
+    path("new/", views.CustomerCreateView.as_view(), name="create"),
+    path("<int:pk>/", views.CustomerDetailView.as_view(), name="detail"),
+    path("<int:pk>/edit/", views.CustomerUpdateView.as_view(), name="edit"),
+    path("<int:pk>/delete/", views.CustomerDeleteView.as_view(), name="delete"),
+]
