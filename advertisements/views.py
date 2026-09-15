@@ -72,6 +72,7 @@ class AdvertisementStatisticView(LoginRequiredMixin, PermissionRequiredMixin, Li
     template_name = "ads/ads-statistic.html"
     context_object_name = "ads"
     permission_required = "advertisements.view_advertisement"
+    paginate_by = 20
 
     def get_queryset(self) -> QuerySet[Advertisement]:
         ads = Advertisement.objects.annotate(
